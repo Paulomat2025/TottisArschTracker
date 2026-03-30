@@ -18,11 +18,15 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Build Windows App
-        run: dotnet publish windows -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish/windows
+      - name: Build
+        run: dotnet publish windows -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
 
       - name: Create ZIP
-        run: Compress-Archive -Path publish/windows/* -DestinationPath TottisArschTracker-Windows.zip
+        run: |
+          mkdir release
+          Copy-Item publish/ArtTimeTracker.Windows.exe release/TottisArschTracker.exe
+          Copy-Item core/fart-sound.wav release/fart-sound.wav
+          Compress-Archive -Path release/* -DestinationPath TottisArschTracker-Windows.zip
 
       - uses: actions/upload-artifact@v4
         with:
@@ -34,30 +38,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build macOS App
-        run: |
-          cd mac
-          swift build -c release
+      - name: Build
+        run: cd mac && swift build -c release
 
       - name: Create App Bundle
         run: |
-          APP_DIR="TottisArschTracker.app/Contents"
-          mkdir -p "$APP_DIR/MacOS"
-          mkdir -p "$APP_DIR/Resources"
-
-          # Copy binary
-          cp mac/.build/release/ArtTimeTracker "$APP_DIR/MacOS/TottisArschTracker"
-
-          # Create Info.plist
           TAG="${GITHUB_REF_NAME#v}"
-          cat > "$APP_DIR/Info.plist" << EOF
+          APP="TottisArschTracker.app/Contents"
+          mkdir -p "$APP/MacOS" "$APP/Resources"
+
+          cp mac/.build/release/ArtTimeTracker "$APP/MacOS/TottisArschTracker"
+          cp mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle/fart-sound.wav "$APP/Resources/fart-sound.wav" 2>/dev/null || cp core/fart-sound.wav "$APP/Resources/fart-sound.wav"
+
+          cat > "$APP/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
               <key>CFBundleName</key>
-              <string>Tottis Arsch Tracker</string>
-              <key>CFBundleDisplayName</key>
               <string>Tottis Arsch Tracker</string>
               <key>CFBundleIdentifier</key>
               <string>com.paulomat.tottisarschtracker</string>
@@ -75,11 +73,10 @@ jobs:
               <true/>
           </dict>
           </plist>
-          EOF
+          PLIST
 
       - name: Create DMG
-        run: |
-          hdiutil create -volname "TottisArschTracker" -srcfolder TottisArschTracker.app -ov -format UDZO TottisArschTracker-macOS.dmg
+        run: hdiutil create -volname "TottisArschTracker" -srcfolder TottisArschTracker.app -ov -format UDZO TottisArschTracker-macOS.dmg
 
       - uses: actions/upload-artifact@v4
         with:
