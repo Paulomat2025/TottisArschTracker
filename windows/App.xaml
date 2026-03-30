@@ -1,0 +1,17 @@
+<Application x:Class="ArtTimeTracker.Windows.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ArtTimeTracker.Windows"
+             xmlns:conv="clr-namespace:ArtTimeTracker.Windows.Converters"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Icons/GriddyIcons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:BoolToStartStopConverter x:Key="BoolToStartStopConverter"/>
+            <conv:BoolToVisConverter x:Key="BoolToVisConverter"/>
+            <conv:NotNullToBoolConverter x:Key="NotNullToBoolConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

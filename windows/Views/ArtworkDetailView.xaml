@@ -1,0 +1,104 @@
+<UserControl x:Class="ArtTimeTracker.Windows.Views.ArtworkDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ArtTimeTracker.Windows.ViewModels">
+
+    <DockPanel>
+        <!-- Header -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Command="{Binding GoBackCommand}" Padding="8,4" Margin="0,0,12,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="{StaticResource IconArrowLeft}" Fill="{x:Static SystemColors.ControlTextBrush}"
+                              Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0"/>
+                        <TextBlock Text="Zurück" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="{Binding ArtworkName}" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding TotalTime}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"
+                           Margin="16,0,0,0" Foreground="Gray"/>
+            </StackPanel>
+
+            <!-- Verknüpfte Datei -->
+            <GroupBox Header="Verknüpfte Datei" Margin="0,0,0,8">
+                <StackPanel Margin="4">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <TextBlock Text="{Binding LinkedFileDisplay}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <Button Content="Neu verknüpfen" Command="{Binding ShowRelinkPanelCommand}" Padding="8,3" Margin="0,0,4,0"/>
+                        <Button Content="Verknüpfung lösen" Command="{Binding UnlinkCommand}" Padding="8,3"/>
+                    </StackPanel>
+                    <!-- Relink Panel -->
+                    <StackPanel Visibility="{Binding IsRelinkPanelVisible, Converter={StaticResource BoolToVisConverter}}"
+                                Margin="0,4,0,0">
+                        <TextBlock Text="Dateiname eingeben (ohne .clip):" FontSize="11" Foreground="Gray" Margin="0,0,0,4"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding RelinkFileName, UpdateSourceTrigger=PropertyChanged}" Width="250"
+                                     Padding="6,4" Margin="0,0,4,0"/>
+                            <TextBlock Text=".clip" VerticalAlignment="Center" Foreground="Gray" Margin="0,0,8,0"/>
+                            <Button Content="Verknüpfen" Command="{Binding RelinkCommand}" Padding="8,3" Margin="0,0,4,0"/>
+                            <Button Content="Abbrechen" Command="{Binding CancelRelinkCommand}" Padding="8,3"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Command="{Binding ShowMergePanelCommand}" Padding="8,4" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="{StaticResource IconLink}" Fill="{x:Static SystemColors.ControlTextBrush}"
+                              Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0"/>
+                        <TextBlock Text="Zusammenführen" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ArchiveArtworkCommand}" Padding="8,4">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="{StaticResource IconArchive}" Fill="{x:Static SystemColors.ControlTextBrush}"
+                              Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0"/>
+                        <TextBlock Text="Archivieren" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!-- Merge Panel -->
+            <GroupBox Header="Anderes Kunstwerk hierhin zusammenführen" Margin="0,0,0,8"
+                      Visibility="{Binding IsMergePanelVisible, Converter={StaticResource BoolToVisConverter}}">
+                <StackPanel Margin="4">
+                    <TextBlock Text="Alle Sessions werden übernommen, das andere Kunstwerk wird gelöscht."
+                               FontSize="11" Foreground="Gray" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                    <ComboBox ItemsSource="{Binding MergeCandidates}" SelectedItem="{Binding SelectedMergeCandidate}"
+                              DisplayMemberPath="Name" MinWidth="300" Margin="0,0,0,8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Zusammenführen" Command="{Binding MergeSelectedCommand}" Padding="8,4"
+                                IsEnabled="{Binding SelectedMergeCandidate, Converter={StaticResource NotNullToBoolConverter}}"
+                                Margin="0,0,8,0"/>
+                        <Button Content="Abbrechen" Command="{Binding CancelMergeCommand}" Padding="8,4"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- Delete -->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,8,0,0">
+            <Button Command="{Binding DeleteSessionCommand}" Padding="8,4">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="{StaticResource IconTrash}" Fill="Red"
+                          Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0"/>
+                    <TextBlock Text="Ausgewählte Session löschen" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- Native DataGrid -->
+        <DataGrid ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserSortColumns="True" GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Datum" Binding="{Binding Date}" Width="120"/>
+                <DataGridTextColumn Header="Start" Binding="{Binding StartTime}" Width="80"/>
+                <DataGridTextColumn Header="Ende" Binding="{Binding EndTime}" Width="80"/>
+                <DataGridTextColumn Header="Dauer" Binding="{Binding Duration}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="core/ArtTimeTracker.Core.csproj" />
+  <Project Path="windows/ArtTimeTracker.Windows.csproj" />
+</Solution>

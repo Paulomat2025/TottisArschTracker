@@ -1,0 +1,12 @@
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/bin/Debug/net8.0/ArtTimeTracker.Core.deps.json
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/bin/Debug/net8.0/ArtTimeTracker.Core.dll
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/bin/Debug/net8.0/ArtTimeTracker.Core.pdb
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.csproj.AssemblyReference.cache
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.AssemblyInfoInputs.cache
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.AssemblyInfo.cs
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.csproj.CoreCompileInputs.cache
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.dll
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/refint/ArtTimeTracker.Core.dll
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ArtTimeTracker.Core.pdb
+/Users/pauljentsch/Documents/01_Projects/Totti Arsch Tracker/v3/core/obj/Debug/net8.0/ref/ArtTimeTracker.Core.dll

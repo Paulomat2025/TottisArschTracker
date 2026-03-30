@@ -1,0 +1,92 @@
+<UserControl x:Class="ArtTimeTracker.Windows.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ArtTimeTracker.Windows.ViewModels">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="4">
+
+            <!-- Timer GroupBox -->
+            <GroupBox Margin="0,0,0,12">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="{StaticResource IconTimer}" Fill="{x:Static SystemColors.ControlTextBrush}"
+                              Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0"/>
+                        <TextBlock Text="Timer"/>
+                    </StackPanel>
+                </GroupBox.Header>
+                <StackPanel HorizontalAlignment="Center" Margin="8,12">
+                    <TextBlock Text="{Binding TrackingLabel}" FontSize="13" HorizontalAlignment="Center"
+                               Foreground="Gray"/>
+                    <TextBlock Text="{Binding ElapsedText}" FontSize="42" FontWeight="Light"
+                               FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,8"/>
+                    <TextBlock Text="Clip Studio Paint wird automatisch erkannt"
+                               FontSize="11" HorizontalAlignment="Center" Foreground="DarkGray"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Neues Kunstwerk -->
+            <GroupBox Header="Neues Kunstwerk" Margin="0,0,0,12">
+                <StackPanel Orientation="Horizontal" Margin="4">
+                    <TextBox Text="{Binding NewArtworkName, UpdateSourceTrigger=PropertyChanged}" Width="300"
+                             Padding="6,4" Margin="0,0,8,0"/>
+                    <Button Content="Hinzufügen" Command="{Binding AddArtworkCommand}" Padding="12,4"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Kunstwerke -->
+            <GroupBox Header="Kunstwerke" Margin="0,0,0,12">
+                <ListView ItemsSource="{Binding Artworks}" BorderThickness="0"
+                          SelectionMode="Single">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="4,6"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" Width="250"
+                                            DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="Gesamtzeit" Width="120"
+                                            DisplayMemberBinding="{Binding TotalTime}"/>
+                            <GridViewColumn Header="Sessions" Width="80"
+                                            DisplayMemberBinding="{Binding SessionCount}"/>
+                            <GridViewColumn Header="" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Öffnen" Padding="8,2"
+                                                Command="{Binding DataContext.OpenArtworkDetailCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+
+            <!-- Letzte Sessions -->
+            <GroupBox Header="Letzte Sessions">
+                <ListView ItemsSource="{Binding RecentSessions}" BorderThickness="0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Kunstwerk" Width="200"
+                                            DisplayMemberBinding="{Binding ArtworkName}"/>
+                            <GridViewColumn Header="Datum" Width="160"
+                                            DisplayMemberBinding="{Binding Date}"/>
+                            <GridViewColumn Header="Dauer" Width="100"
+                                            DisplayMemberBinding="{Binding Duration}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
