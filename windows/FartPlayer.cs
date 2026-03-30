@@ -27,8 +27,7 @@ public static class FartPlayer
         // Menüpunkte / ListItems
         EventManager.RegisterClassHandler(typeof(ListBoxItem), ListBoxItem.SelectedEvent, new RoutedEventHandler((_, _) => Play()));
         EventManager.RegisterClassHandler(typeof(ListViewItem), ListViewItem.SelectedEvent, new RoutedEventHandler((_, _) => Play()));
-        EventManager.RegisterClassHandler(typeof(ComboBox), ComboBox.DropDownOpenedEvent, new EventHandler((_, _) => Play()));
-        EventManager.RegisterClassHandler(typeof(TabItem), Selector.SelectedEvent, new RoutedEventHandler((_, _) => Play()));
+        EventManager.RegisterClassHandler(typeof(Selector), Selector.SelectionChangedEvent, new SelectionChangedEventHandler((_, _) => Play()));
 
         // Programm geöffnet
         Play();
