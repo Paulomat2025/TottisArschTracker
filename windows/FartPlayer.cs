@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Media;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,9 +15,10 @@ public static class FartPlayer
 
     public static void Init()
     {
-        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "love-sound.wav");
-        if (File.Exists(path))
-            _player = new SoundPlayer(path);
+        // Sound aus eingebetteter Resource laden
+        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("love-sound.wav");
+        if (stream != null)
+            _player = new SoundPlayer(stream);
 
         // Buttons
         EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler((_, _) => Play()));

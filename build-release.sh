@@ -77,16 +77,14 @@ if command -v dotnet &> /dev/null; then
         -p:Version="$VERSION" \
         -o "$DIST/win-tmp" 2>/dev/null
 
-    mkdir -p "$DIST/TottisArschTracker-Windows"
-    cp "$DIST/win-tmp/ArtTimeTracker.Windows.exe" "$DIST/TottisArschTracker-Windows/TottisArschTracker.exe"
-    cp core/love-sound.wav "$DIST/TottisArschTracker-Windows/love-sound.wav"
+    # Sound ist in der EXE eingebettet — nur die EXE reicht
+    cp "$DIST/win-tmp/ArtTimeTracker.Windows.exe" "$DIST/TottisArschTracker.exe"
 
-    # ZIP
     cd "$DIST"
-    zip -r "TottisArschTracker-Windows-v${VERSION}.zip" TottisArschTracker-Windows/
+    zip "TottisArschTracker-Windows-v${VERSION}.zip" TottisArschTracker.exe
     cd ..
 
-    rm -rf "$DIST/win-tmp" "$DIST/TottisArschTracker-Windows"
+    rm -rf "$DIST/win-tmp" "$DIST/TottisArschTracker.exe"
 
     echo "✓ Windows: dist/TottisArschTracker-Windows-v${VERSION}.zip"
 else

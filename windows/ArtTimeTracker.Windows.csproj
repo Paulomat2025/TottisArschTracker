@@ -5,9 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\core\love-sound.wav" Link="love-sound.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="..\core\love-sound.wav" LogicalName="love-sound.wav" />
   </ItemGroup>
 
   <ItemGroup>
