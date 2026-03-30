@@ -15,10 +15,20 @@ public static class FartPlayer
 
     public static void Init()
     {
-        // Sound aus eingebetteter Resource laden
-        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("love-sound.wav");
-        if (stream != null)
-            _player = new SoundPlayer(stream);
+        try
+        {
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("love-sound.wav");
+            if (stream != null)
+            {
+                // In Temp-Datei schreiben, da SoundPlayer mit Streams aus Assemblies Probleme hat
+                var tempPath = Path.Combine(Path.GetTempPath(), "tottis-love-sound.wav");
+                using (var fs = File.Create(tempPath))
+                    stream.CopyTo(fs);
+                _player = new SoundPlayer(tempPath);
+                _player.Load();
+            }
+        }
+        catch { }
 
         // Buttons
         EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler((_, _) => Play()));
@@ -37,6 +47,6 @@ public static class FartPlayer
 
     public static void Play()
     {
-        _player?.Play();
+        try { _player?.Play(); } catch { }
     }
 }
