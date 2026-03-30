@@ -26,6 +26,7 @@ struct ArtTimeTrackerApp: App {
                         }
                     }
                     processWatcher.start()
+                    UpdateChecker.checkForUpdate()
                 }
                 .frame(minWidth: 700, minHeight: 450)
         }

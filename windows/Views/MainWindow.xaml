@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:ArtTimeTracker.Windows.ViewModels"
         xmlns:v="clr-namespace:ArtTimeTracker.Windows.Views"
-        Title="💩 Tottis Arsch Tracker" Width="900" Height="620"
+        Title="{Binding WindowTitle}" Width="900" Height="620"
         MinWidth="700" MinHeight="450"
         WindowStartupLocation="CenterScreen"
         Icon="/app-icon.ico">

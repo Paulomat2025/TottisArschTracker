@@ -1,63 +1,90 @@
-# 💩 Tottis Arsch Tracker
+# Tottis Arsch Tracker
 
 Trackt automatisch wie lange du an Kunstwerken in **Clip Studio Paint** arbeitest.
 
-## Features
-
-- **Auto-Tracking**: Erkennt automatisch welche .clip-Datei in Clip Studio Paint geöffnet ist
-- **Mehrere Kunstwerke**: Arbeite an beliebig vielen Werken gleichzeitig
-- **Session-Historie**: Alle Sessions werden mit Datum, Start, Ende und Dauer gespeichert
-- **Statistiken**: Diagramme für Zeit pro Tag und Stunden pro Kunstwerk
-- **Datei-Verknüpfung**: Dateien können umbenannt und neu verknüpft werden (wie InDesign Links)
-- **Zusammenführen**: Mehrere Kunstwerke zu einem verschmelzen
-- **Manuelles Anlegen**: Kunstwerke auch ohne Datei-Verknüpfung erstellen
-
-## Installation
+## Download & Installation
 
 ### macOS
-1. [Neueste Version herunterladen](../../releases/latest) → `.dmg` Datei
-2. Doppelklick → App in Programme ziehen
-3. Fertig
+
+1. Gehe zu [**Releases**](https://github.com/Paulomat2025/TottisArschTracker/releases/latest)
+2. Lade `TottisArschTracker-macOS.dmg` herunter
+3. Doppelklick auf die `.dmg` Datei
+4. `TottisArschTracker.app` in den **Programme**-Ordner ziehen
+5. Beim ersten Start: Rechtsklick > "Öffnen" (Gatekeeper-Warnung bestätigen)
+
+**Wichtig:** Die App braucht die Berechtigung **Bildschirmaufnahme** (Systemeinstellungen > Datenschutz & Sicherheit > Bildschirmaufnahme), um den Fenstertitel von Clip Studio Paint zu lesen.
 
 ### Windows
-1. [Neueste Version herunterladen](../../releases/latest) → `.zip` Datei
-2. Entpacken → `TottisArschTracker.exe` starten
-3. Fertig (keine Installation nötig)
 
-## Projektstruktur
+1. Gehe zu [**Releases**](https://github.com/Paulomat2025/TottisArschTracker/releases/latest)
+2. Lade `TottisArschTracker-Windows.zip` herunter
+3. ZIP entpacken in einen Ordner deiner Wahl (z.B. `C:\Programme\TottisArschTracker`)
+4. `ArtTimeTracker.Windows.exe` starten
+5. Optional: Rechtsklick auf die `.exe` > "An Taskleiste anheften" oder Desktop-Verknüpfung erstellen
 
-```
-core/       → Shared C# Library (Models, DB, Services, ProcessWatcher)
-mac/        → Native macOS App (SwiftUI)
-windows/    → Native Windows App (WPF)
-```
+**Keine Installation nötig** — einfach entpacken und starten.
+
+## Updates
+
+Die App prüft beim Start automatisch, ob eine neue Version verfügbar ist. Wenn ja, wirst du gefragt ob du das Update herunterladen möchtest.
+
+Manuell: Einfach die [neueste Version](https://github.com/Paulomat2025/TottisArschTracker/releases/latest) herunterladen und die alte ersetzen. Deine Daten bleiben erhalten (die Datenbank liegt separat).
+
+## Features
+
+- **Auto-Tracking** — erkennt automatisch welche `.clip`-Datei in Clip Studio Paint geöffnet ist
+- **Mehrere Kunstwerke** — arbeite an beliebig vielen Werken gleichzeitig
+- **Session-Historie** — alle Sessions mit Datum, Start, Ende und Dauer
+- **Statistiken** — Diagramme für Zeit pro Tag und Stunden pro Kunstwerk
+- **Datei-Verknüpfung** — Dateien umbenennen und neu verknüpfen (wie InDesign Links)
+- **Zusammenführen** — mehrere Kunstwerke zu einem verschmelzen
+- **Manuelles Anlegen** — Kunstwerke auch ohne Datei-Verknüpfung erstellen
+
+## Wo sind meine Daten?
+
+Die SQLite-Datenbank wird automatisch angelegt:
+
+| OS | Pfad |
+|----|------|
+| macOS | `~/Library/Application Support/ArtTimeTracker/arttimetracker.db` |
+| Windows | `%LOCALAPPDATA%\ArtTimeTracker\arttimetracker.db` |
+
+Du kannst die `.db`-Datei sichern/kopieren — sie enthält alle deine Tracking-Daten.
 
 ## Entwicklung
 
-### macOS App
-```bash
-cd mac
-swift build
-swift run
+### Projektstruktur
+
+```
+core/       → Shared C# Library (Models, DB, Services)
+mac/        → Native macOS App (SwiftUI + SQLite)
+windows/    → Native Windows App (WPF + Entity Framework)
 ```
 
-### Windows App (Cross-Compile von macOS)
-```bash
-dotnet build windows
-dotnet run --project windows
-```
+### Voraussetzungen
 
-### Release bauen
+- **macOS**: Xcode 15+ / Swift 5.9+
+- **Windows**: .NET 8 SDK
+
+### Bauen
+
 ```bash
 # macOS
-cd mac && swift build -c release
+cd mac && swift build
 
-# Windows
-dotnet publish windows -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
+# Windows (auch cross-compile von macOS möglich)
+dotnet build windows
 ```
 
-## Datenbank
+### Release erstellen
 
-SQLite-Datei wird automatisch angelegt unter:
-- **macOS**: `~/Library/Application Support/ArtTimeTracker/arttimetracker.db`
-- **Windows**: `%LOCALAPPDATA%\ArtTimeTracker\arttimetracker.db`
+Einfach einen Git-Tag pushen — GitHub Actions baut automatisch die Releases:
+
+```bash
+git tag v1.1.0
+git push origin v1.1.0
+```
+
+Das erstellt automatisch ein GitHub Release mit:
+- `TottisArschTracker-macOS.dmg`
+- `TottisArschTracker-Windows.zip`

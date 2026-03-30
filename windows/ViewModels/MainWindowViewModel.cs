@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -23,6 +25,11 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isAutoTracking = true;
 
+    public static string AppVersion => Assembly.GetExecutingAssembly()
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion?.Split('+')[0] ?? "1.0.0";
+
+    public string WindowTitle => $"Tottis Arsch Tracker v{AppVersion}";
+
     public MainWindowViewModel()
     {
         _timerService.Tick += () => Application.Current?.Dispatcher.Invoke(() =>
@@ -42,6 +49,27 @@ public partial class MainWindowViewModel : ViewModelBase
 
         _processWatcher.Start();
         NavigateToDashboard();
+        _ = CheckForUpdateAsync();
+    }
+
+    private async Task CheckForUpdateAsync()
+    {
+        var update = await UpdateChecker.CheckForUpdateAsync(AppVersion);
+        if (update == null) return;
+
+        Application.Current?.Dispatcher.Invoke(() =>
+        {
+            var result = MessageBox.Show(
+                $"Version {update.Version} ist verfügbar!\n\nJetzt herunterladen?",
+                "Update verfügbar",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Process.Start(new ProcessStartInfo(update.DownloadUrl) { UseShellExecute = true });
+            }
+        });
     }
 
     private async void OnFileChanged(string? fileName)

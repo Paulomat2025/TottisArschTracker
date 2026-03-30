@@ -51,6 +51,6 @@ struct ContentView: View {
                 }
             }
         }
-        .navigationTitle("💩 Tottis Arsch Tracker")
+        .navigationTitle("Tottis Arsch Tracker v\(UpdateChecker.currentVersion)")
     }
 }

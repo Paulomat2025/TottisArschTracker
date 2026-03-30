@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build Windows App
+        run: dotnet publish windows -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish/windows
+
+      - name: Create ZIP
+        run: Compress-Archive -Path publish/windows/* -DestinationPath TottisArschTracker-Windows.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: TottisArschTracker-Windows.zip
+
+  build-macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build macOS App
+        run: |
+          cd mac
+          swift build -c release
+
+      - name: Create App Bundle
+        run: |
+          APP_DIR="TottisArschTracker.app/Contents"
+          mkdir -p "$APP_DIR/MacOS"
+          mkdir -p "$APP_DIR/Resources"
+
+          # Copy binary
+          cp mac/.build/release/ArtTimeTracker "$APP_DIR/MacOS/TottisArschTracker"
+
+          # Create Info.plist
+          TAG="${GITHUB_REF_NAME#v}"
+          cat > "$APP_DIR/Info.plist" << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleName</key>
+              <string>Tottis Arsch Tracker</string>
+              <key>CFBundleDisplayName</key>
+              <string>Tottis Arsch Tracker</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.paulomat.tottisarschtracker</string>
+              <key>CFBundleVersion</key>
+              <string>${TAG}</string>
+              <key>CFBundleShortVersionString</key>
+              <string>${TAG}</string>
+              <key>CFBundleExecutable</key>
+              <string>TottisArschTracker</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>14.0</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Create DMG
+        run: |
+          hdiutil create -volname "TottisArschTracker" -srcfolder TottisArschTracker.app -ov -format UDZO TottisArschTracker-macOS.dmg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: TottisArschTracker-macOS.dmg
+
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            TottisArschTracker-Windows.zip
+            TottisArschTracker-macOS.dmg

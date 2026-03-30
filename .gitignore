@@ -1,0 +1,30 @@
+# Build outputs
+bin/
+obj/
+dist/
+.build/
+Build/
+DerivedData/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+.idea/
+
+# macOS
+.DS_Store
+*.swp
+
+# Windows
+Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
+
+# Crash logs
+crash.log
