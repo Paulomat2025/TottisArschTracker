@@ -20,12 +20,13 @@ mkdir -p "$APP/MacOS" "$APP/Resources"
 
 cp mac/.build/release/ArtTimeTracker "$APP/MacOS/TottisArschTracker"
 
-# Resources (fart sound)
+# Resources (fart sound + icon)
 if [ -d "mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle" ]; then
     cp mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle/fart-sound.wav "$APP/Resources/"
 else
     cp core/fart-sound.wav "$APP/Resources/"
 fi
+cp core/AppIcon.icns "$APP/Resources/AppIcon.icns"
 
 cat > "$APP/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -46,6 +47,8 @@ cat > "$APP/Info.plist" <<PLIST
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 </dict>

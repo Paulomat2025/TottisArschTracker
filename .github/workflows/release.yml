@@ -65,6 +65,7 @@ jobs:
           else
             cp core/fart-sound.wav "$APP/Resources/fart-sound.wav"
           fi
+          cp core/AppIcon.icns "$APP/Resources/AppIcon.icns"
 
           cat > "$APP/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -78,6 +79,7 @@ jobs:
             <key>CFBundleExecutable</key><string>TottisArschTracker</string>
             <key>CFBundlePackageType</key><string>APPL</string>
             <key>LSMinimumSystemVersion</key><string>14.0</string>
+            <key>CFBundleIconFile</key><string>AppIcon</string>
             <key>NSHighResolutionCapable</key><true/>
           </dict>
           </plist>

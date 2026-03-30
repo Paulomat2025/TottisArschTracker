@@ -14,4 +14,12 @@ class SoundPlayer {
         fartSound?.stop()
         fartSound?.play()
     }
+
+    func startGlobalMonitor() {
+        // Fart bei jedem Tastendruck (Text-Input)
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            self.playFart()
+            return event
+        }
+    }
 }

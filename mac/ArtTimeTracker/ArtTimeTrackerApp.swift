@@ -27,6 +27,10 @@ struct ArtTimeTrackerApp: App {
                     }
                     processWatcher.start()
                     UpdateChecker.checkForUpdate()
+
+                    // Fart beim Öffnen + bei jedem Tastendruck
+                    SoundPlayer.shared.playFart()
+                    SoundPlayer.shared.startGlobalMonitor()
                 }
                 .buttonStyle(FartButtonStyle())
                 .frame(minWidth: 700, minHeight: 450)
