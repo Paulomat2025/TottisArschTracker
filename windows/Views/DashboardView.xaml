@@ -20,8 +20,12 @@
                                Foreground="Gray"/>
                     <TextBlock Text="{Binding ElapsedText}" FontSize="42" FontWeight="Light"
                                FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,8"/>
-                    <TextBlock Text="Clip Studio Paint wird automatisch erkannt"
-                               FontSize="11" HorizontalAlignment="Center" Foreground="DarkGray"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+                        <Button Content="⏹ Timer stoppen" Command="{Binding StopTimerCommand}" Padding="12,6"
+                                Visibility="{Binding IsTimerRunning, Converter={StaticResource BoolToVisConverter}}"/>
+                    </StackPanel>
+                    <TextBlock Text="Klicke ▶ Start bei einem Kunstwerk oder lass CSP Auto-Tracking laufen"
+                               FontSize="11" HorizontalAlignment="Center" Foreground="DarkGray" Margin="0,6,0,0"/>
                 </StackPanel>
             </GroupBox>
 
@@ -46,16 +50,25 @@
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name" Width="250"
-                                            DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Header="Gesamtzeit" Width="120"
-                                            DisplayMemberBinding="{Binding TotalTime}"/>
-                            <GridViewColumn Header="Sessions" Width="80"
-                                            DisplayMemberBinding="{Binding SessionCount}"/>
                             <GridViewColumn Header="" Width="80">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Öffnen" Padding="8,2"
+                                        <Button Content="{Binding TimerButtonText}" Padding="8,2" MinWidth="65"
+                                                Command="{Binding DataContext.ToggleTimerCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Name" Width="220"
+                                            DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="Gesamtzeit" Width="100"
+                                            DisplayMemberBinding="{Binding TotalTime}"/>
+                            <GridViewColumn Header="Sessions" Width="70"
+                                            DisplayMemberBinding="{Binding SessionCount}"/>
+                            <GridViewColumn Header="" Width="70">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Details" Padding="8,2"
                                                 Command="{Binding DataContext.OpenArtworkDetailCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                 CommandParameter="{Binding}"/>
                                     </DataTemplate>

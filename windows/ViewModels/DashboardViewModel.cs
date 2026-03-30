@@ -39,6 +39,9 @@ public partial class DashboardViewModel : ViewModelBase
         _dataService = dataService;
         _timerService = timerService;
         _timerService.Tick += OnTimerTick;
+
+        _timerService.SessionCompleted -= OnSessionCompleted;
+        _timerService.SessionCompleted += OnSessionCompleted;
     }
 
     public async Task LoadAsync()
@@ -48,7 +51,16 @@ public partial class DashboardViewModel : ViewModelBase
             artworks.Select(a =>
             {
                 var total = TimeSpan.FromTicks(a.Sessions.Sum(s => s.Duration.Ticks));
-                return new ArtworkDisplayItem { Artwork = a, Name = a.Name, LinkedFile = a.LinkedFileName, TotalTime = FormatDuration(total), SessionCount = a.Sessions.Count };
+                var isActive = _timerService.IsRunning && _timerService.CurrentArtworkId == a.Id;
+                return new ArtworkDisplayItem
+                {
+                    Artwork = a,
+                    Name = a.Name,
+                    LinkedFile = a.LinkedFileName,
+                    TotalTime = FormatDuration(total),
+                    SessionCount = a.Sessions.Count,
+                    IsActive = isActive
+                };
             }));
 
         var sessions = await _dataService.GetAllSessionsAsync(7);
@@ -74,11 +86,44 @@ public partial class DashboardViewModel : ViewModelBase
         if (item?.Artwork != null) ArtworkSelected?.Invoke(item.Artwork);
     }
 
+    [RelayCommand]
+    private async Task ToggleTimer(ArtworkDisplayItem? item)
+    {
+        if (item?.Artwork == null) return;
+
+        if (_timerService.IsRunning && _timerService.CurrentArtworkId == item.Artwork.Id)
+        {
+            // Stop timer for this artwork
+            _timerService.Stop();
+        }
+        else
+        {
+            // Stop any running timer first, then start for this artwork
+            _timerService.Stop();
+            _timerService.Start(item.Artwork.Id, item.Artwork.Name);
+        }
+        await LoadAsync();
+    }
+
+    [RelayCommand]
+    private async Task StopTimer()
+    {
+        _timerService.Stop();
+        await LoadAsync();
+    }
+
+    private async void OnSessionCompleted(int artworkId, string name, DateTime start, DateTime end)
+    {
+        await _dataService.AddSessionAsync(artworkId, start, end);
+        System.Windows.Application.Current?.Dispatcher.Invoke(async () => await LoadAsync());
+    }
+
     private void OnTimerTick()
     {
         var elapsed = _timerService.Elapsed;
         ElapsedText = $"{(int)elapsed.TotalHours:D2}:{elapsed.Minutes:D2}:{elapsed.Seconds:D2}";
         IsTimerRunning = _timerService.IsRunning;
+        TrackingLabel = _timerService.IsRunning ? $"Tracking: {_timerService.CurrentArtworkName}" : "Kein aktives Tracking";
     }
 
     public static string FormatDuration(TimeSpan ts)
@@ -97,6 +142,8 @@ public class ArtworkDisplayItem
     public string LinkedFileDisplay => LinkedFile != null ? $"📎 {LinkedFile}.clip" : "Keine Datei verknüpft";
     public string TotalTime { get; set; } = "0s";
     public int SessionCount { get; set; }
+    public bool IsActive { get; set; }
+    public string TimerButtonText => IsActive ? "⏹ Stop" : "▶ Start";
 }
 
 public class SessionDisplayItem
