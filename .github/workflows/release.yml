@@ -47,8 +47,7 @@ jobs:
       - name: Build
         run: |
           cd mac
-          # Charts is a system framework on macOS 14+, no extra deps needed
-          swift build -c release
+          swift build -c release -Xswiftc -sdk -Xswiftc "$(xcrun --sdk macosx --show-sdk-path)"
 
       - name: Package App Bundle
         run: |
