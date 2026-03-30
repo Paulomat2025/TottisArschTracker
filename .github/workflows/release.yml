@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir release
           Copy-Item publish/ArtTimeTracker.Windows.exe release/TottisArschTracker.exe
-          Copy-Item core/fart-sound.wav release/fart-sound.wav
+          Copy-Item core/love-sound.wav release/love-sound.wav
           Compress-Archive -Path release/* -DestinationPath TottisArschTracker-Windows.zip
 
       - uses: actions/upload-artifact@v4
@@ -58,11 +58,11 @@ jobs:
           cp mac/.build/release/ArtTimeTracker "$APP/MacOS/TottisArschTracker"
 
           # Copy sound resource from SPM bundle or fallback to core/
-          BUNDLE_PATH="mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle/fart-sound.wav"
+          BUNDLE_PATH="mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle/love-sound.wav"
           if [ -f "$BUNDLE_PATH" ]; then
-            cp "$BUNDLE_PATH" "$APP/Resources/fart-sound.wav"
+            cp "$BUNDLE_PATH" "$APP/Resources/love-sound.wav"
           else
-            cp core/fart-sound.wav "$APP/Resources/fart-sound.wav"
+            cp core/love-sound.wav "$APP/Resources/love-sound.wav"
           fi
           cp core/AppIcon.icns "$APP/Resources/AppIcon.icns"
 

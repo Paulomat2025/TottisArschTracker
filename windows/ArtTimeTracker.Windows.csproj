@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\core\fart-sound.wav" Link="fart-sound.wav">
+    <Content Include="..\core\love-sound.wav" Link="love-sound.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

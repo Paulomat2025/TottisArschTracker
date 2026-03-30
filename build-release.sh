@@ -22,9 +22,9 @@ cp mac/.build/release/ArtTimeTracker "$APP/MacOS/TottisArschTracker"
 
 # Resources (fart sound + icon)
 if [ -d "mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle" ]; then
-    cp mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle/fart-sound.wav "$APP/Resources/"
+    cp mac/.build/release/ArtTimeTracker_ArtTimeTracker.bundle/love-sound.wav "$APP/Resources/"
 else
-    cp core/fart-sound.wav "$APP/Resources/"
+    cp core/love-sound.wav "$APP/Resources/"
 fi
 cp core/AppIcon.icns "$APP/Resources/AppIcon.icns"
 
@@ -79,7 +79,7 @@ if command -v dotnet &> /dev/null; then
 
     mkdir -p "$DIST/TottisArschTracker-Windows"
     cp "$DIST/win-tmp/ArtTimeTracker.Windows.exe" "$DIST/TottisArschTracker-Windows/TottisArschTracker.exe"
-    cp core/fart-sound.wav "$DIST/TottisArschTracker-Windows/fart-sound.wav"
+    cp core/love-sound.wav "$DIST/TottisArschTracker-Windows/love-sound.wav"
 
     # ZIP
     cd "$DIST"

@@ -5,7 +5,7 @@ class SoundPlayer {
     private var fartSound: NSSound?
 
     private init() {
-        if let url = Bundle.module.url(forResource: "fart-sound", withExtension: "wav") {
+        if let url = Bundle.module.url(forResource: "love-sound", withExtension: "wav") {
             fartSound = NSSound(contentsOf: url, byReference: true)
         }
     }

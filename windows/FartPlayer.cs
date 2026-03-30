@@ -14,7 +14,7 @@ public static class FartPlayer
 
     public static void Init()
     {
-        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fart-sound.wav");
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "love-sound.wav");
         if (File.Exists(path))
             _player = new SoundPlayer(path);
 
