@@ -148,4 +148,14 @@ public partial class MainWindowViewModel : ViewModelBase
             StatusText = "Auto-Tracking deaktiviert";
         }
     }
+
+    [RelayCommand]
+    private void QuitApp()
+    {
+        _timerService.Stop();
+        _processWatcher.Stop();
+        _processWatcher.Dispose();
+        _timerService.Dispose();
+        Application.Current.Shutdown();
+    }
 }

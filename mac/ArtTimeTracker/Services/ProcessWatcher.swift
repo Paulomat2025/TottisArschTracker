@@ -52,22 +52,30 @@ class ProcessWatcher: ObservableObject {
     private func detectOpenFile() -> String? {
         let apps = NSWorkspace.shared.runningApplications
         for app in apps {
-            guard let name = app.localizedName,
-                  name.contains("CLIP STUDIO PAINT") || name.contains("CLIPStudioPaint") else { continue }
+            let bundleId = app.bundleIdentifier ?? ""
+            let appName = app.localizedName ?? ""
 
-            // Get window title via accessibility or process info
-            if let pid = Optional(app.processIdentifier) {
-                let options = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
-                if let windowList = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] {
-                    for window in windowList {
-                        guard let ownerPID = window[kCGWindowOwnerPID as String] as? Int32,
-                              ownerPID == pid,
-                              let title = window[kCGWindowName as String] as? String,
-                              !title.isEmpty else { continue }
-                        if let parsed = parseFileName(title) {
-                            return parsed
-                        }
-                    }
+            // Match verschiedene CSP-Varianten
+            let isCSP = bundleId.lowercased().contains("clipstudio") ||
+                         bundleId.lowercased().contains("clip-studio") ||
+                         bundleId.lowercased().contains("celsys") ||
+                         appName.contains("CLIP STUDIO") ||
+                         appName.contains("CLIPStudio") ||
+                         appName.contains("Clip Studio")
+
+            guard isCSP else { continue }
+
+            let pid = app.processIdentifier
+            let options = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
+            guard let windowList = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else { continue }
+
+            for window in windowList {
+                guard let ownerPID = window[kCGWindowOwnerPID as String] as? Int32,
+                      ownerPID == pid,
+                      let title = window[kCGWindowName as String] as? String,
+                      !title.isEmpty else { continue }
+                if let parsed = parseFileName(title) {
+                    return parsed
                 }
             }
         }
@@ -80,6 +88,7 @@ class ProcessWatcher: ObservableObject {
             var cleaned = part.trimmingCharacters(in: .whitespaces)
             cleaned = cleaned.replacingOccurrences(of: "[Geändert]", with: "")
             cleaned = cleaned.replacingOccurrences(of: "[Modified]", with: "")
+            cleaned = cleaned.replacingOccurrences(of: "[Recovered]", with: "")
             cleaned = cleaned.replacingOccurrences(of: "*", with: "")
             cleaned = cleaned.trimmingCharacters(in: .whitespaces)
 

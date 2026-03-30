@@ -80,6 +80,15 @@
                         <TextBlock Text="Statistiken" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
+                <Button Command="{Binding QuitAppCommand}" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left" Padding="10,8" Margin="0,16,0,2" Background="Transparent"
+                        BorderThickness="0" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✕" FontWeight="Bold" Width="16" TextAlignment="Center" Margin="0,0,8,0"
+                                   Foreground="{x:Static SystemColors.ControlTextBrush}"/>
+                        <TextBlock Text="Beenden" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 

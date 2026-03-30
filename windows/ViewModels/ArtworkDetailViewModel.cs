@@ -91,6 +91,25 @@ public partial class ArtworkDetailViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task PickFile()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "Clip Studio Paint Datei wählen",
+            Filter = "Clip Studio Dateien (*.clip)|*.clip",
+            Multiselect = false
+        };
+        if (dialog.ShowDialog() == true)
+        {
+            var fileName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+            await _dataService.RelinkArtworkAsync(_artwork.Id, fileName);
+            _artwork.LinkedFileName = fileName;
+            IsRelinkPanelVisible = false;
+            await LoadAsync(_artwork);
+        }
+    }
+
+    [RelayCommand]
     private async Task Relink()
     {
         var name = RelinkFileName.Trim();

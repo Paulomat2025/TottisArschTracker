@@ -13,8 +13,8 @@ public class ProcessWatcher : IDisposable
     private string? _lastDetectedFile;
 
     private static readonly string[] CspProcessNames = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-        ? new[] { "CLIPStudioPaint" }
-        : new[] { "CLIP STUDIO PAINT", "CLIPStudioPaint" };
+        ? new[] { "CLIPStudioPaint", "CLIP STUDIO PAINT", "clipstudiopaint" }
+        : new[] { "CLIP STUDIO PAINT", "CLIPStudioPaint", "clipstudiopaint" };
 
     public bool IsWatching { get; private set; }
     public string? CurrentFileName { get; private set; }

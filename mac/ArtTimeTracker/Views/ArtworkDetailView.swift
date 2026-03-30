@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ArtworkDetailView: View {
     @EnvironmentObject var store: ArtworkStore
@@ -50,7 +51,10 @@ struct ArtworkDetailView: View {
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Button("Neu verknüpfen") {
+                    Button("Datei wählen...") {
+                        pickClipFile()
+                    }
+                    Button("Manuell verknüpfen") {
                         relinkFileName = currentArtwork?.linkedFileName ?? ""
                         showRelink = true
                     }
@@ -64,7 +68,7 @@ struct ArtworkDetailView: View {
 
             // Relink Sheet
             if showRelink {
-                GroupBox("Datei neu verknüpfen") {
+                GroupBox("Datei manuell verknüpfen") {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Gib den Dateinamen ein (ohne .clip Extension).")
                             .font(.caption)
@@ -143,5 +147,18 @@ struct ArtworkDetailView: View {
 
     private func loadSessions() {
         sessions = Database.shared.getSessions(forArtwork: artwork.id)
+    }
+
+    private func pickClipFile() {
+        let panel = NSOpenPanel()
+        panel.title = "Clip Studio Paint Datei wählen"
+        panel.allowedContentTypes = [UTType(filenameExtension: "clip") ?? .data]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+
+        if panel.runModal() == .OK, let url = panel.url {
+            let fileName = url.deletingPathExtension().lastPathComponent
+            store.relinkArtwork(id: artwork.id, linkedFileName: fileName)
+        }
     }
 }

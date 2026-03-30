@@ -24,7 +24,8 @@
                 <StackPanel Margin="4">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                         <TextBlock Text="{Binding LinkedFileDisplay}" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                        <Button Content="Neu verknüpfen" Command="{Binding ShowRelinkPanelCommand}" Padding="8,3" Margin="0,0,4,0"/>
+                        <Button Content="Datei wählen..." Command="{Binding PickFileCommand}" Padding="8,3" Margin="0,0,4,0"/>
+                        <Button Content="Manuell verknüpfen" Command="{Binding ShowRelinkPanelCommand}" Padding="8,3" Margin="0,0,4,0"/>
                         <Button Content="Verknüpfung lösen" Command="{Binding UnlinkCommand}" Padding="8,3"/>
                     </StackPanel>
                     <!-- Relink Panel -->
