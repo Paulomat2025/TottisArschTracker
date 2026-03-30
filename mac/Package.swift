@@ -9,6 +9,9 @@ let package = Package(
             name: "ArtTimeTracker",
             path: "ArtTimeTracker",
             exclude: ["Assets.xcassets"],
+            resources: [
+                .copy("fart-sound.wav")
+            ],
             linkerSettings: [
                 .linkedLibrary("sqlite3")
             ]

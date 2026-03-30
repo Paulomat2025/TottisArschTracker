@@ -28,6 +28,7 @@ struct ArtTimeTrackerApp: App {
                     processWatcher.start()
                     UpdateChecker.checkForUpdate()
                 }
+                .buttonStyle(FartButtonStyle())
                 .frame(minWidth: 700, minHeight: 450)
         }
         .windowStyle(.titleBar)

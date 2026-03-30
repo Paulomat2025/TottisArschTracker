@@ -13,6 +13,8 @@ public partial class App : Application
         DispatcherUnhandledException += OnUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += OnDomainException;
 
+        FartPlayer.Init();
+
         base.OnStartup(e);
     }
 
